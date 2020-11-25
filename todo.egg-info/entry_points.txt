@@ -7,4 +7,5 @@
         show=filework:show
         new-list=filework:new_list
         delete-list=filework:delete_list
+        clear=filework:clear
         
