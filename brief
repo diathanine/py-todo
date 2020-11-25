@@ -1,0 +1,20 @@
+$cli listname add tuple adds new lines
+$cli listname complete tuple #moves to listname_completed
+$cli summary #lists all to do lists
+$cli move listname item, listname #moves item from one list to the other
+
+
+$cli render settings
+## allows to set: wrap length, truncation length, line prepend and append, how many lines to display, render to
+$cli render listname -combined, -complete, -active, -separate
+
+structurally we store each list as a folder with txt files
+so we have:
+listname:
+  render-settings
+  listname-active
+  listname-completed
+
+and then we render to a user selected file
+
+lists we can marshall as line separated items, break on the line separation
