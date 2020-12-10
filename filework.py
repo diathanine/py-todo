@@ -2,8 +2,7 @@ import click
 import os
 
 
-def get_path(name):
-    target=path("storage/%s" %name)
+
 
 @click.command()
 def foo():
@@ -27,6 +26,8 @@ def new_list(name):
 @click.argument('name')
 def delete_list(name):
     click.echo('deleting %s' %name)
+    target_dir = "storage/%s" %name
+    os.rmdir(target_dir)
 
 @click.command()
 @click.argument('name')
@@ -35,13 +36,39 @@ def add(name, item):
     click.echo('adding %s to %s' %(item, name))
     target = 'storage/%s/active.txt' %name
     active=click.open_file(target, mode='a', errors='strict', lazy=True, atomic=False)
+    #check for dupes here
     active.write(item)
+
+#border
+def pull_line(path, search_phrase):
+    click.echo("searching %s for %s" %(path, search_phrase))
+    with click.open_file(path, mode='r') as file:
+        lines=file.readlines()
+        item_text= False
+        for i, line in enumerate(lines):
+            if search_phrase in line:
+                item_text= line
+                click.echo(item_text)
+                lines.pop(i)
+    with click.open_file(path, mode='w') as file:
+        updated_list = "\n".join(lines)
+        file.write(updated_list)
+    return item_text
 
 @click.command()
 @click.argument('name')
 @click.argument('item')
 def complete(name, item):
     click.echo('completing %s in %s' %(item, name))
+    active_file = "storage/%s/active.txt" %name
+    complete_file = "storage/%s/complete.txt" %name
+    item = pull_line(active_file, item)
+    if item:
+        complete_file = click.open_file(complete_file, mode="a")
+        complete_file.write(item)
+    else:
+        click.echo("sorry couldn't find your item")
+
 
 @click.command()
 @click.argument('name')
@@ -49,6 +76,7 @@ def complete(name, item):
 @click.argument('target')
 def move(name, item, target):
     click.echo('moving %s from %s to %s' %(item, name, target))
+
 
 
 @click.command()
