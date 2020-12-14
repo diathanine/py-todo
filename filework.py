@@ -1,7 +1,21 @@
 import click
 import os
+import shutil
 
-
+def pull_line(path, search_phrase):
+    click.echo("searching %s for %s" %(path, search_phrase))
+    with click.open_file(path, mode='r') as file:
+        lines=file.readlines()
+        item_text= False
+        for i, line in enumerate(lines):
+            if search_phrase in line:
+                item_text= line
+                click.echo(item_text)
+                lines.pop(i)
+    with click.open_file(path, mode='w') as file:
+        updated_list = "\n".join(lines)
+        file.write(updated_list)
+    return item_text
 
 
 @click.command()
@@ -27,7 +41,7 @@ def new_list(name):
 def delete_list(name):
     click.echo('deleting %s' %name)
     target_dir = "storage/%s" %name
-    os.rmdir(target_dir)
+    shutil.rmtree(target_dir)
 
 @click.command()
 @click.argument('name')
@@ -39,21 +53,8 @@ def add(name, item):
     #check for dupes here
     active.write(item)
 
-#border
-def pull_line(path, search_phrase):
-    click.echo("searching %s for %s" %(path, search_phrase))
-    with click.open_file(path, mode='r') as file:
-        lines=file.readlines()
-        item_text= False
-        for i, line in enumerate(lines):
-            if search_phrase in line:
-                item_text= line
-                click.echo(item_text)
-                lines.pop(i)
-    with click.open_file(path, mode='w') as file:
-        updated_list = "\n".join(lines)
-        file.write(updated_list)
-    return item_text
+
+
 
 @click.command()
 @click.argument('name')
@@ -69,23 +70,48 @@ def complete(name, item):
     else:
         click.echo("sorry couldn't find your item")
 
-
+#border
 @click.command()
 @click.argument('name')
 @click.argument('item')
 @click.argument('target')
 def move(name, item, target):
     click.echo('moving %s from %s to %s' %(item, name, target))
+    active_file = "storage/%s/active.txt" %name
+    complete_file = "storage/%s/complete.txt" %name
+
+    line = pull_line(active_file, item)
+    if line:
+        target_path = "storage/%s/active.txt" %target
+        target_file = click.open_file(target_path, mode="a")
+        target_file.write(line)
+    else:
+        line = pull_line(complete_file, item)
+        if line:
+            target_path = "storage/%s/complete.txt" %target
+            target_file = click.open_file(target_path, mode="a")
+            target_file.write(line)
+        else:
+            click.echo("sorry, that item can't be found")
 
 
 
 @click.command()
 @click.argument('name', default='.')
 def show(name):
-    target = 'storage/%s/active.txt' %name
-    list=click.open_file(target, mode='r')
-    click.echo(list)
-    click.echo('%s' %name)
+    if name == '.':
+        target = 'storage'
+        lists = os.listdir(target)
+        for list in lists:
+            click.echo(list)
+    else:
+        target = 'storage/%s/active.txt' %name
+        list=click.open_file(target, mode='r')
+        lines=list.readlines()
+        click.echo(str(name))
+        for line in lines:
+            click.echo(line)
+        click.echo("end of list")
 
 @click.command()
 def clear():
