@@ -13,7 +13,7 @@ def pull_line(path, search_phrase):
                 click.echo(item_text)
                 lines.pop(i)
     with click.open_file(path, mode='w') as file:
-        updated_list = "\n".join(lines)
+        updated_list = "".join(lines)
         file.write(updated_list)
     return item_text
 
@@ -51,7 +51,7 @@ def add(name, item):
     target = 'storage/%s/active.txt' %name
     active=click.open_file(target, mode='a', errors='strict', lazy=True, atomic=False)
     #check for dupes here
-    active.write(item)
+    active.write(item + "\n")
 
 
 
@@ -114,5 +114,8 @@ def show(name):
         click.echo("end of list")
 
 @click.command()
-def clear():
+@click.argument('name')
+def clear(name):
     click.echo('clearing')
+    path = "storage/%s/complete.txt" %name
+    os.remove(path)
