@@ -2,6 +2,8 @@ import click
 import os
 import shutil
 
+#might want to rejigger to work with yaml or a database
+
 def pull_line(path, search_phrase):
     click.echo("searching %s for %s" %(path, search_phrase))
     with click.open_file(path, mode='r') as file:
