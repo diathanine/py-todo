@@ -11,8 +11,23 @@ class Tree:
             node = parent.insert(text, side)
             return(node)
     def address_map(self):
-        print("List: %s" %self.title)
         address_book = self.child.address_crawl()
+        return address_book
+
+    def remove_node(node): #should destroy all sub nodes ie if you delete item 2 all items 2.x should also be destroyed
+        #cut node out of tree and move child node to replace it
+        if node.child:
+            node.child.parent = node.parent
+            if node.parent.sub == node:
+                node.parent.sub = node.child
+            else:
+                node.parent.child=node.child #don't need to check if parent.child exists because we know the parent has a sub or child since that's our node. so if the parent doesn't have a sub it must have a child
+
+        #get this node and all sub nodes, then call destroy on all of them
+        dict = node.sub.address_crawl() # we dont need the top node's children
+        for i in dict.items():
+            i.destroy()
+
 
 class Node:
     def __init__(self, text, status, child, sub, parent):
@@ -33,6 +48,10 @@ class Node:
             if self.child.child:
                 self.child.child.parent = self.child
             return(self.child)
+
+    def destroy(self):
+        return(0)
+
     def address_crawl (self, dict={}, address):
         dict.update({address : self})
         if self.sub:
