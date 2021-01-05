@@ -10,6 +10,9 @@ class Tree:
         else:
             node = parent.insert(text, side)
             return(node)
+    def address_map(self):
+        print("List: %s" %self.title)
+        address_book = self.child.address_crawl()
 
 class Node:
     def __init__(self, text, status, child, sub, parent):
@@ -30,3 +33,13 @@ class Node:
             if self.child.child:
                 self.child.child.parent = self.child
             return(self.child)
+    def address_crawl (self, dict={}, address):
+        dict.update({address : self})
+        if self.sub:
+            sub_address = "%s.1" %address
+            dict.update(self.sub.address_crawl(dict, sub_address))
+        if sub.child:
+            child_address = str(int(address[-1])+1)
+            dict.update(self.child.address_crawl(dict, child_address))
+        else:
+            return(dict)
