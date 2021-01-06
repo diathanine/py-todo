@@ -8,7 +8,8 @@ class Tree:
             self.child = Node(text, status, None, None, self) #we allow a status to be passed for building saved trees
             return(self.child)
         else:
-            node = parent.insert(text, side)
+            # print (side)
+            node = parent.insert(text, status, side)
             return(node)
 
     def address_map(self):

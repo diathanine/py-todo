@@ -21,12 +21,12 @@ def add_item(project_name, text, parent_address, sub_item):
     else:
         side=0
     tree = get_tree(project_name)
-
     if parent_address == 'None':
         parent = None
     else:
         parent = tree[1][parent_address]
-    tree[0].add(text, parent, side)
+
+    tree[0].add(text, parent, side, 'to do')
     serializer.save(tree[0], "storage/%s/tree.txt" %project_name)
 
 @click.command()
@@ -40,12 +40,17 @@ def change_status(project_name, node_address, new_status):
 @click.command()
 @click.argument('project_name')
 def view (project_name):
-    tree = get_tree(project_name)[0]
+    tree = get_tree(project_name)
+    book_load_version = tree[1]
+    tree = tree[0]
     address_book = tree.address_map()
+    print('load ver:\n' + str(book_load_version))
+    print('crawl ver:\n' + str(address_book))
     for key in address_book:
         node = address_book[key]
-        # string = len(str(key).split('.'))*'-' + key + ') ' + node.text + ' | ' + node.status
-        string = (len(str(key).split('.'))-1)*'-' + str(key) + ') ' + node.text + ' | ' + node.status
+        indent_level = len(str(key).split('.')) -1
+        string = indent_level*'-' + str(key) + ') ' + node.text + ' | ' + node.status
+        print(node.status)
         click.echo(string)
 
 def get_tree(name):
