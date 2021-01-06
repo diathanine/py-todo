@@ -3,15 +3,15 @@ from setuptools import setup
 setup(
     name="todo",
     version='0.1',
-    py_modules=['filework'],
+    py_modules=['frontend'],
     install_requires=['click'],
     entry_points='''
         [console_scripts]
-        test=filework:foo
-        add=filework:add
-        complete=filework:complete
+        new=frontend:new_tree
+        add=frontend:add_item
+        status=frontend:change_status
+        view=frontend:view
         move=filework:move
-        show=filework:show
         new-list=filework:new_list
         delete-list=filework:delete_list
         clear=filework:clear
