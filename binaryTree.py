@@ -2,7 +2,7 @@ class Tree:
     def __init__(self, title):
         self.title = title
         self.child = None
-    def add(self, text, status="to do", parent, side): #this is only for adding new nodes that thus wont have children
+    def add(self, text, parent, side, status="to do"): #this is only for adding new nodes that thus wont have children
     #we pass objects in for parent and children
         if parent == None:
             self.child = Node(text, status, None, None, self) #we allow a status to be passed for building saved trees
