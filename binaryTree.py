@@ -12,7 +12,9 @@ class Tree:
             return(node)
 
     def address_map(self):
-        address_book = self.child.address_crawl()
+        address_book=[]
+        if self.child:
+            address_book = self.child.address_crawl()
         return address_book
 
     def remove_node(node): #should destroy all sub nodes ie if you delete item 2 all items 2.x should also be destroyed

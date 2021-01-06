@@ -1,7 +1,7 @@
 import binaryTree
 
 def convert(tree): #convert to a human readable text file
-    dict=tree.address_crawl() #dictionary of addresses and node objects
+    dict=tree.address_map() #dictionary of addresses and node objects
     array=[tree.title]
     for key in dict:
         array.append("%s:%s:%s" %(entry, dict[key].text, dict[key].status))
@@ -13,7 +13,7 @@ def convert(tree): #convert to a human readable text file
     #1.0:subitem0:status
     #1.1:subitem1:status
 
-def Save(tree, file_path):
+def save(tree, file_path):
     data = convert(tree)
     file = open(file_path, 'w')
     file.write(data)
