@@ -8,7 +8,6 @@ class Tree:
             self.child = Node(text, status, None, None, self) #we allow a status to be passed for building saved trees
             return(self.child)
         else:
-            # print (side)
             node = parent.insert(text, status, side)
             return(node)
 
@@ -16,6 +15,7 @@ class Tree:
         address_book=[]
         if self.child:
             address_book = self.child.address_crawl()
+        # print(address_book)
         return address_book
 
     def remove_node(node): #should destroy all sub nodes ie if you delete item 2 all items 2.x should also be destroyed
@@ -56,13 +56,19 @@ class Node:
     def destroy(self):
         return(0)
 
-    def address_crawl (self, dict={}, address=0):
+    def address_crawl (self, dict={}, address=0): #doesnt work properly
+        address=str(address)
         dict.update({address : self})
+        # print(dict)
         if self.sub:
             sub_address = "%s.0" %address
             dict.update(self.sub.address_crawl(dict, sub_address))
+            address =address.split('.')
+            address.pop(-1)
+            address = '.'.join(address)
         if self.child:
-            child_address = str(int(address[-1])+1)
+            address = address.split('.')
+            address[-1] = str(int(address[-1])+1)
+            child_address = '.'.join(address)
             dict.update(self.child.address_crawl(dict, child_address))
-        else:
-            return(dict)
+        return(dict)

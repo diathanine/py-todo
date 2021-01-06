@@ -2,12 +2,10 @@ import binaryTree
 import copy
 
 def convert(tree): #convert to a human readable text file
-    print(tree)
-    dict=tree.address_map() #dictionary of addresses and node objects
+    dict = tree.address_map() #dictionary of addresses and node objects
     array=[tree.title]
     for key in dict:
         array.append("%s:%s:%s" %(key, dict[key].text, dict[key].status))
-    print(array)
     string = "\n".join(array)
     return(string)
     #should give something like:
@@ -38,11 +36,8 @@ def load(file_path):
     file.pop(0)
     if file:
         line = file[0].split(':')
-        print(line)
         parent = tree.add(get_text(line), None, 0, line[-1].strip()) #create root node
         file.pop(0)
-        print(line)
-        print('status:%s' %parent.status)
         address_book={"0" : parent}
 
     prev = 1

@@ -41,16 +41,15 @@ def change_status(project_name, node_address, new_status):
 @click.argument('project_name')
 def view (project_name):
     tree = get_tree(project_name)
-    book_load_version = tree[1]
+    # book_load_version = tree[1]
+    address_book = tree[1] #not sure how to fix crawl, and the load version works so
     tree = tree[0]
-    address_book = tree.address_map()
-    print('load ver:\n' + str(book_load_version))
-    print('crawl ver:\n' + str(address_book))
+    # print('load ver:\n' + str(book_load_version))
+    # print('crawl ver:\n' + str(address_book))
     for key in address_book:
         node = address_book[key]
         indent_level = len(str(key).split('.')) -1
         string = indent_level*'-' + str(key) + ') ' + node.text + ' | ' + node.status
-        print(node.status)
         click.echo(string)
 
 def get_tree(name):
