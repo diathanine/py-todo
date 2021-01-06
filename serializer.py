@@ -4,10 +4,11 @@ def convert(tree): #convert to a human readable text file
     dict=tree.address_map() #dictionary of addresses and node objects
     array=[tree.title]
     for key in dict:
-        array.append("%s:%s:%s" %(entry, dict[key].text, dict[key].status))
+        array.append("%s:%s:%s" %(key, dict[key].text, dict[key].status))
     string = "\n".join(array)
     return(string)
     #should give something like:
+    #title
     #0:item0:status
     #1:item1:status
     #1.0:subitem0:status
@@ -28,15 +29,15 @@ def get_text(line): #this is a dodge to circumnavigate potential delimiter colli
 
 def load(file_path):
     file = open(file_path, 'r').readlines()
-
+    address_book={}
     tree = binaryTree.Tree(file[0])#create tree with title
     file.pop(0)
+    if file:
+        line = file[0].split(':')
+        parent = tree.add(get_text(line), None, 0, line[-1]) #create root node
+        file.pop(0)
+        address_book={"0" : parent}
 
-    line = file[0].split(':')
-    parent = tree.add(get_text(line), None, 0, line[-1]) #create root node
-    file.pop(0)
-
-    address_book={"0" : parent}
     prev = 1
 
     for line in file: #create the address book as you go and add into it

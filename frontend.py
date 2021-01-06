@@ -6,7 +6,7 @@ import os
 @click.command()
 @click.argument('name')
 def new_tree(name):
-    tree = binaryTree.Tree('name')
+    tree = binaryTree.Tree(name)
     os.mkdir("storage/%s" %name)
     serializer.save(tree, "storage/%s/tree.txt" %name)
 
@@ -14,14 +14,20 @@ def new_tree(name):
 @click.option('-s', '--sub_item', is_flag=True)
 @click.argument('project_name')
 @click.argument('text')
-def add_item(project_name, text, parent_address, sub):
-    if sub:
+@click.argument('parent_address')
+def add_item(project_name, text, parent_address, sub_item):
+    if sub_item: # it think we can get rid of this actually since 1=true
         side=1
     else:
         side=0
     tree = get_tree(project_name)
-    parent = tree[1][parent_address]
-    binaryTree.add(text, parent, side)
+
+    if parent_address == 'None':
+        parent = None
+    else:
+        parent = tree[1][parent_address]
+    tree[0].add(text, parent, side)
+    serializer.save(tree[0], "storage/%s/tree.txt" %project_name)
 
 @click.command()
 @click.argument('project_name') #might break this into 3 different functions
@@ -34,11 +40,13 @@ def change_status(project_name, node_address, new_status):
 @click.command()
 @click.argument('project_name')
 def view (project_name):
-    tree = get_tree(project_name)
+    tree = get_tree(project_name)[0]
     address_book = tree.address_map()
     for key in address_book:
-        string = len(key.split('.'))*'-' + key + ') ' + address_book[key]
+        node = address_book[key]
+        # string = len(str(key).split('.'))*'-' + key + ') ' + node.text + ' | ' + node.status
+        string = (len(str(key).split('.'))-1)*'-' + str(key) + ') ' + node.text + ' | ' + node.status
         click.echo(string)
 
 def get_tree(name):
-    return(serializer.load("storage/%s/tree.txt" %project_name))
+    return(serializer.load("storage/%s/tree.txt" %name))

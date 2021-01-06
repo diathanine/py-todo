@@ -60,7 +60,7 @@ class Node:
         if self.sub:
             sub_address = "%s.0" %address
             dict.update(self.sub.address_crawl(dict, sub_address))
-        if sub.child:
+        if self.child:
             child_address = str(int(address[-1])+1)
             dict.update(self.child.address_crawl(dict, child_address))
         else:
