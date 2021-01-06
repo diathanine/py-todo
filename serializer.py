@@ -20,7 +20,7 @@ def Save(tree, file_path):
     file.close()
     return(0)
 
-def get_text(line): #this is a dodge to circumnavigate potential delimiter collision in texxt (someone could put a colon in there)
+def get_text(line): #this is a dodge to circumnavigate potential delimiter collision in text (someone could put a colon in there)
     line.pop(0)
     line.pop(-1)
     text = ':'.join(line)
@@ -33,7 +33,7 @@ def load(file_path):
     file.pop(0)
 
     line = file[0].split(':')
-    parent = tree.add(get_text(line), line[-1], None, 0) #create root node
+    parent = tree.add(get_text(line), None, 0, line[-1]) #create root node
     file.pop(0)
 
     address_book={"0" : parent}
@@ -54,7 +54,7 @@ def load(file_path):
             parent = address[-1]-1
             parent = address_book['.'.join(parent)]
 
-        node = tree.add(get_text(line), line[-1], parent, side)
+        node = tree.add(get_text(line), parent, side, line[-1])
         address_book.update({line[0]:node})
         parent = node
-    return(tree)
+    return([tree, address_book])
