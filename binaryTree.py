@@ -2,14 +2,15 @@ class Tree:
     def __init__(self, title):
         self.title = title
         self.child = None
-    def add(self, text, child, sub, parent, side): #for children pass none if no children
+    def add(self, text, status="to do", parent, side): #this is only for adding new nodes that thus wont have children
     #we pass objects in for parent and children
         if parent == None:
-            self.child = Node(text, "to do", None, None, self)
+            self.child = Node(text, status, None, None, self) #we allow a status to be passed for building saved trees
             return(self.child)
         else:
             node = parent.insert(text, side)
             return(node)
+
     def address_map(self):
         address_book = self.child.address_crawl()
         return address_book
@@ -37,14 +38,14 @@ class Node:
         self.sub= sub
         self.parent= parent
 
-    def insert(self, text, side):
+    def insert(self, text, status, side):
         if side:
-            self.sub = Node(text, "to do", self.sub, None, self) #it cant inherit subs because if the new node is replacing a child with sub, then the sub moves with the replaced child. if the new nod is a sub being inserted into a chain of subs then those subs are children
+            self.sub = Node(text, status, self.sub, None, self) #it cant inherit subs because if the new node is replacing a child with sub, then the sub moves with the replaced child. if the new nod is a sub being inserted into a chain of subs then those subs are children
             if self.sub.child:
-                self.sub.child.parent = self.sub
+                self.sub.child.parent = self.sub #correct parent relation
             return(self.sub)
         else:
-            self.child = Node(text, "to do", self.child, None, self)
+            self.child = Node(text, status, self.child, None, self) #make sure it inherits the children right
             if self.child.child:
                 self.child.child.parent = self.child
             return(self.child)
@@ -52,10 +53,10 @@ class Node:
     def destroy(self):
         return(0)
 
-    def address_crawl (self, dict={}, address):
+    def address_crawl (self, dict={}, address=0):
         dict.update({address : self})
         if self.sub:
-            sub_address = "%s.1" %address
+            sub_address = "%s.0" %address
             dict.update(self.sub.address_crawl(dict, sub_address))
         if sub.child:
             child_address = str(int(address[-1])+1)
