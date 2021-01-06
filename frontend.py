@@ -31,11 +31,14 @@ def add_item(project_name, text, parent_address, sub_item):
 
 @click.command()
 @click.argument('project_name') #might break this into 3 different functions
+@click.argument('node_address')
+@click.argument('new_status')
 def change_status(project_name, node_address, new_status):
     tree = get_tree(project_name)
-    address_book = tree.address_map()
+    address_book = tree[1]
     node = address_book[node_address]
     node.status = new_status
+    serializer.save(tree[0], "storage/%s/tree.txt" %project_name)
 
 @click.command()
 @click.argument('project_name')
