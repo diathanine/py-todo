@@ -18,3 +18,9 @@ listname:
 and then we render to a user selected file
 
 lists we can marshall as line separated items, break on the line separation
+
+0) node deleting | to do
+1) some sort of session thing to not have to type the parent everytime | to do
+2) auto tree balancing for epenthesis | to do
+3) ability to view all projects | to do
+4) rendering | to do
