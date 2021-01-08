@@ -12,11 +12,11 @@ class Tree:
             return(node)
 
     def address_map(self):
-        address_book=[]
+        address_book={}
         if self.child:
             address_book = self.child.address_crawl()
         # print(address_book)
-        return address_book
+        return(address_book)
 
     def remove_node(node): #should destroy all sub nodes ie if you delete item 2 all items 2.x should also be destroyed
         #cut node out of tree and move child node to replace it
@@ -56,19 +56,14 @@ class Node:
     def destroy(self):
         return(0)
 
-    def address_crawl (self, dict={}, address=0): #doesnt work properly
-        address=str(address)
-        dict.update({address : self})
-        # print(dict)
+    def address_crawl(self, address_book={}, address = '0'):
+        address_book.update({address : self})
         if self.sub:
-            sub_address = "%s.0" %address
-            dict.update(self.sub.address_crawl(dict, sub_address))
-            address =address.split('.')
-            address.pop(-1)
-            address = '.'.join(address)
+            sub_address = '%s.0' %address
+            self.sub.address_crawl(address_book, sub_address)
         if self.child:
-            address = address.split('.')
-            address[-1] = str(int(address[-1])+1)
-            child_address = '.'.join(address)
-            dict.update(self.child.address_crawl(dict, child_address))
-        return(dict)
+            last_digit = int(address[-1]) + 1
+            all_but_last = address[0:len(address)-1]
+            child_address = all_but_last + str(last_digit)
+            self.child.address_crawl(address_book, child_address)
+        return(address_book)

@@ -46,18 +46,20 @@ def load(file_path):
         line = line.split(':') #there is a delimiter collision problem here if someone includes ':' in their text, but i think we can side step that
         address = str(line[0]).split('.')
         level = len(address) - prev
-        # if address is longer its a sub node
+        # if address is longer its a sub node (it can only be longer by 1)
         # if address is same its a child
-        # if adress is shorter its the child of a higher node
+        # if adress is shorter its the child of a higher node (can be shorter by a lot)
         if level == 1:
             side = 1
         else:
             side = 0
         if level < 0:
-            parent = int(address[-1])-1
+            last_digit = int(address[-1]) -1
+            parent = address[0:len(address)-1] + [str(last_digit)]
             parent = address_book['.'.join(parent)]
 
         node = tree.add(get_text(line), parent, side, line[-1].strip())
         address_book.update({line[0]:node})
         parent = node
+        prev = len(address)
     return([tree, address_book])

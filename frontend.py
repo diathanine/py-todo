@@ -44,8 +44,7 @@ def change_status(project_name, node_address, new_status):
 @click.argument('project_name')
 def view (project_name):
     tree = get_tree(project_name)
-    # book_load_version = tree[1]
-    address_book = tree[1] #not sure how to fix crawl, and the load version works so
+    address_book = tree[1]
     tree = tree[0]
     # print('load ver:\n' + str(book_load_version))
     # print('crawl ver:\n' + str(address_book))
