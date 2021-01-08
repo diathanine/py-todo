@@ -5,7 +5,7 @@ class Tree:
     def add(self, text, parent, side, status="to do"): #this is only for adding new nodes that thus wont have children
     #we pass objects in for parent and children
         if parent == None:
-            self.child = Node(text, status, None, None, self) #we allow a status to be passed for building saved trees
+            self.child = Node(text, status, self.child, None, self) #we allow a status to be passed for building saved trees
             return(self.child)
         else:
             node = parent.insert(text, status, side)
