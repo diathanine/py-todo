@@ -42,6 +42,16 @@ def change_status(project_name, node_address, new_status):
 
 @click.command()
 @click.argument('project_name')
+@click.argument('node_address')
+@click.argument('new_text')
+def change_text(project_name, node_address, new_text):
+    tree = get_tree(project_name)
+    node = tree[1][node_address]
+    node.text = new_text
+    serializer.save(tree[0], "storage/%s/tree.txt" %project_name)
+
+@click.command()
+@click.argument('project_name')
 def view (project_name):
     tree = get_tree(project_name)
     address_book = tree[1]

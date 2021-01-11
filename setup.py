@@ -11,9 +11,6 @@ setup(
         add=frontend:add_item
         status=frontend:change_status
         view=frontend:view
-        move=filework:move
-        new-list=filework:new_list
-        delete-list=filework:delete_list
-        clear=filework:clear
+        edit=frontend:change_text
         '''
 )
