@@ -64,5 +64,10 @@ def load(file_path):
         prev = len(address)
     return([tree, address_book])
 
-    def load_settings(project_name):
-        return(0)
+    def load_settings(file_path):
+        settings_dict = {}
+        file = open(file_path, 'r').readlines()
+        for line in file:
+            line = line.split(':')
+            settings.update({line[0]:line[1]})
+        return(settings_dict)

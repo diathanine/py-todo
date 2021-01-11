@@ -1,5 +1,6 @@
 import binaryTree
 import serializer
+import render
 import click
 import os
 
@@ -63,6 +64,15 @@ def view (project_name):
         indent_level = len(str(key).split('.')) -1
         string = indent_level*'-' + str(key) + ') ' + node.text + ' | ' + node.status
         click.echo(string)
+
+@click.command()
+@click.argument('project_name')
+def render (project_name):
+    tree = get_tree(project_name)
+    address_book = tree[1]
+    string = render.render(address_book)
+    click.echo(string)
+    return(0)
 
 def get_tree(name):
     return(serializer.load("storage/%s/tree.txt" %name))

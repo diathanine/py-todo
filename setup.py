@@ -12,5 +12,6 @@ setup(
         status=frontend:change_status
         view=frontend:view
         edit=frontend:change_text
+        render=frontend:render
         '''
 )
