@@ -64,10 +64,27 @@ def load(file_path):
         prev = len(address)
     return([tree, address_book])
 
-    def load_settings(file_path):
-        settings_dict = {}
-        file = open(file_path, 'r').readlines()
-        for line in file:
-            line = line.split(':')
-            settings.update({line[0]:line[1]})
-        return(settings_dict)
+def load_settings(file_path):
+    settings_dict = {}
+    file = open(file_path, 'r').readlines()
+    for line in file:
+        line = line.split(':')
+        settings_dict.update({line[0]:line[1][:-1]})
+    return(settings_dict)
+
+        #settings should look like:
+        #line width:50
+        #line count:15
+        #elipsis:...
+        #indent: ->
+        #prefix:     #there's tabs here
+        #suffix:
+
+def save_settings(settings_dict, file_path):
+    string = ''
+    for key in settings_dict:
+            string = string + '\n%s:%s' %(key,  settings_dict[key])
+    file = open(file_path, 'w')
+    file.write(string)
+    file.close()
+    return(0)

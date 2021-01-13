@@ -1,6 +1,6 @@
 import binaryTree
 import serializer
-import render
+import render as textify #for some reason the name render pisses it off, theres a namespace collision somewhere i guess
 import click
 import os
 
@@ -9,6 +9,7 @@ import os
 def new_tree(name):
     tree = binaryTree.Tree(name)
     os.mkdir("storage/%s" %name)
+    serializer.save(render_settings, "storage/%s/render_settings.txt" %name)
     serializer.save(tree, "storage/%s/tree.txt" %name)
 
 @click.command()
@@ -67,10 +68,19 @@ def view (project_name):
 
 @click.command()
 @click.argument('project_name')
-def render (project_name):
+@click.argument('file_path')
+def render(project_name, file_path = '-'): #print to console when not specified
     tree = get_tree(project_name)
     address_book = tree[1]
-    string = render.render(address_book)
+    settings_dict = serializer.load_settings('storage/%s/render_settings.txt' %project_name)
+    string = textify.render(address_book, settings_dict)
+    click.echo(string)
+    return(0)
+
+@click.command()
+@click.argument('project_name')
+def render_settings(project_name):
+    string = 'settings updated here'
     click.echo(string)
     return(0)
 
