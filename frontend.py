@@ -7,6 +7,7 @@ import os
 @click.command()
 @click.argument('name')
 def new_tree(name):
+    render_settings = open("storage/default_render_settings.txt",'r')
     tree = binaryTree.Tree(name)
     os.mkdir("storage/%s" %name)
     serializer.save(render_settings, "storage/%s/render_settings.txt" %name)
