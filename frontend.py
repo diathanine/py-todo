@@ -68,13 +68,13 @@ def view (project_name):
 
 @click.command()
 @click.argument('project_name')
-@click.argument('file_path')
-def render(project_name, file_path = '-'): #print to console when not specified
+@click.argument('file', type=click.File('w'), default = '-')
+def render(project_name, file): #print to console when not specified
     tree = get_tree(project_name)
     address_book = tree[1]
     settings_dict = serializer.load_settings('storage/%s/render_settings.txt' %project_name)
     string = textify.render(address_book, settings_dict)
-    click.echo(string)
+    file.write(string)
     return(0)
 
 @click.command()
